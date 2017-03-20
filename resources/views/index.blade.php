@@ -83,8 +83,8 @@
                 </div>
 
                 <div class="links">
-                    <a href="#">Showing now</a>
-                    <a href="#">Genres</a>
+                    <a href="{{url('/showing')}}">Showing now</a>
+                    <a href="{{url('/genre')}}">Genres</a>
                     <a href="#">Coming soon</a>
                 </div>
                 <br>

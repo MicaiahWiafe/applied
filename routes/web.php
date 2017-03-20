@@ -15,6 +15,14 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/genre', function () {
+    return view('genre');
+});
+
+Route::get('/showing', function () {
+    return view('showing');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
