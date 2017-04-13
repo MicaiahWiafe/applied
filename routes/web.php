@@ -19,10 +19,26 @@ Route::get('/genre', function () {
     return view('genre');
 });
 
-Route::get('/showing', function () {
-    return view('showing');
-});
+Route::get('/showing', array(
+	'uses' => 'MovieController@index',
+	'as' => 'index'
+));
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+
+Route::get('/movie/new', array(
+	'uses' => 'MovieController@newMovie',
+	'as' => 'newMovie'
+));
+
+Route::post('/movie/new', array(
+	'uses' => 'MovieController@addMovie',
+	'as' => 'addMovie'
+));
+
+Route::get('/movie/{id}', array(
+	'uses' => 'MovieController@viewMovie',
+	'as' => 'viewMovie'
+));

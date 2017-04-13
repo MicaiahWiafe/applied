@@ -1,6 +1,6 @@
 <?php
 
-namespace Silverbird;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 

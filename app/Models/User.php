@@ -27,7 +27,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function tickets(){
-        return this->hasMany('Ticket');
-    }
+    // public function tickets(){
+    //     return this->hasMany('Ticket');
+    // }
 }
