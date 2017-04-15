@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,7 +19,16 @@ class Ticket extends Model
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'email', 'user_id', 'active', 'movie_id', 
+    ];
 
 
     public function user(){
