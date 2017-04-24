@@ -16,7 +16,7 @@ class MovieController extends Controller
      */
     public function index()
     {
-        return View('showing', ['movies' => Movie::all()]);
+        return View('showing', ['movies' => Movie::all() ] );
     }
 
     /**
@@ -53,7 +53,7 @@ class MovieController extends Controller
         $movie->show_date = $request->show_date;
         $movie->show_time = $request->show_time;
 
-        $target_dir = "img/";
+        $target_dir = public_path(). "/img/";
         $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
         $uploadOk = 1;
         $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);

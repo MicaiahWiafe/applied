@@ -7,6 +7,7 @@
 		</header>
 
 			<div class="container">
+			    <input type="hidden" name="_token" value="{{ csrf_token() }}">
 			    <div >
 			            <div class="panel panel-default">
 			                <div class="panel-heading" style="text-transform: uppercase;">
@@ -17,8 +18,19 @@
 			                			({{$movie->year}})
 			                		</div>
 			                		<div class="col-sm-9 pull-right">
-			                			<!-- Buy ticket button -->
-										<input type="submit" class="btn btn-primary" value="Purchase Ticket">
+			                			
+			                			<!-- Purchase ticket button -->
+			                			<form action="https://app.mpowerpayments.com/click2pay-redirect/a13a0fa93b00b511833395c5">
+											<input type="submit" class="btn btn-primary" value="Purchase Ticket">
+										</form>
+										
+										<form action="{{ URL::route('buy') }}" method="post" enctype="multipart/form-data">
+											<input type="hidden" name="_token" value="{{ csrf_token() }}">
+											<input type="hidden" name="movie_id" value="{{ $movie->id }}">
+											<input type="hidden" name="movie_title" value="{{ $movie->title }}">
+
+											<input type="submit" class="btn btn-primary" value="qr test">
+										</form>
 			                		</div>
 			                	</div>
 			                </div>
@@ -37,6 +49,7 @@
 							</div>
 						</div>
 				</div>
+				
 
 				<div>
 					

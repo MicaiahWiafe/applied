@@ -31,8 +31,8 @@ class Ticket extends Model
     ];
 
 
-    public function user(){
-        return this->belongsTo('User');
-    }
+    // public function user(){
+    //     return this->belongsTo('User');
+    // }
 
 }

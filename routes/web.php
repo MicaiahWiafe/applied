@@ -42,3 +42,13 @@ Route::get('/movie/{id}', array(
 	'uses' => 'MovieController@viewMovie',
 	'as' => 'viewMovie'
 ));
+
+Route::post('/buy', array(
+	'uses' => 'TicketController@test',
+	'as' => 'buy'
+));
+
+// Route::post('/buy', array(
+// 	'uses' => 'MovieController@create',
+// 	'as' => 'create'
+// ));
