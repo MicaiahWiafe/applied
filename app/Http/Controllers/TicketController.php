@@ -13,6 +13,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 use SimpleSoftwareIO\QrCode\BaconQrCodeGenerator;
+use Mailgun\Mailgun;
+
+require base_path('vendor/autoload.php');
+
 
 class TicketController extends Controller
 {
@@ -38,16 +42,9 @@ class TicketController extends Controller
 
         //create svg formated qr code
         $qrcode = new BaconQrCodeGenerator;
-        $qrcode->size(500)->generate('Make a qrcode without Laravel!', public_path().'/qrcode.svg');
+        $qrcode->size(500)->generate($user->email.', '.$movie_title, public_path().'/qrcode.svg');
 
 
-
-        //write png qr file to public folder
-        // $renderer = new \BaconQrCode\Renderer\Image\Png();
-        // $renderer->setHeight(256);
-        // $renderer->setWidth(256);
-        // $writer = new \BaconQrCode\Writer($renderer);
-        // $writer->writeFile('Name:'.$user->name.', Movie:'.$movie_title, 'qrcode.png');
 }
 
 
@@ -88,42 +85,7 @@ class TicketController extends Controller
     {
         // build raw content - QRCode to send email, basic 
          
-        // $tempDir = EXAMPLE_TMP_SERVERPATH; 
-         
-        // // here our data 
-        // // $email = $user->email; 
-        // $email='micaiahwiafe@gmail.com';
-        // $subject = 'Movie Ticket'; 
-        // $body = 'Here is your Ticket'; 
-         
-        // // we building raw data 
-        // $codeContents = 'mailto:'.$email; 
-         
-        // // generating 
-        // QRcode::png($codeContents, $tempDir.'022.png', QR_ECLEVEL_L, 3); 
         
-        // // displaying 
-        // echo '<img src="'.EXAMPLE_TMP_URLRELPATH.'022.png" />'; 
-
-
-
-
-        // Configuring SVG 
-     
-        // $dataText   = 'PHP QR Code :)'; 
-        // $svgTagId   = 'id-of-svg'; 
-        // $saveToFile = false; 
-        // $imageWidth = 250; // px 
-         
-        // // SVG file format support 
-        // $svgCode = QRcode::svg($dataText, $svgTagId, $saveToFile, QR_ECLEVEL_L, $imageWidth); 
-         
-        // echo $svgCode; 
-
-
-
-
-
         // outputs image directly into browser, as PNG stream 
         // $qr = {!! QrCode::size(100)->generate(Request::url()); !!}
 
@@ -149,13 +111,36 @@ class TicketController extends Controller
     // public function send(Request $request, $id)
     public function send(Request $request)
     {
-        
         $user = Auth::user();
-        Mail::send('buy', ['user' => $user], function ($m) use ($user) {
-            $m->from('silverbirdticketing@gmail.com', 'Silverbird Ticketing');
+        // Mail::send('buy', ['user' => $user], function ($m) use ($user) {
+        //     $m->from('silverbirdticketing@gmail.com', 'Silverbird Ticketing');
 
-            $m->to($user->email, $user->name)->subject('Your Ticket');
-        });
+        //     $m->to($user->email, $user->name)->subject('Your Ticket');
+        // });
+                    // # First, instantiate the SDK with your API credentials
+                    // $mg = Mailgun::create('pubkey-fe3899f64463c14630586757721187c9');
+
+                    // # Now, compose and send your message.
+                    // $mg->messages()->send('google.com', [
+                    //   'from'    => 'silverbirdticketing@gmail.com', 
+                    //   'to'      => $user->email, 
+                    //   'subject' => 'The PHP SDK is awesome!', 
+                    //   'text'    => 'It is so simple to send a message.'
+                    // ]);
+
+        # Instantiate the client.
+        $mgClient = new Mailgun(env('MAILGUN_SECRET'));
+        $domain = env('MAILGUN_DOMAIN');
+
+        # Make the call to the client.
+        $result = $mgClient->sendMessage($domain, array(
+            'from'    => 'Silverbird Tickets <silverbirdticketing@gmail.com>',
+            'to'      => $user->email,
+            'subject' => 'Hello',
+            'text'    => 'Testing some Mailgun awesomness!'
+        ),array(
+            'inline'  => array(public_path().'/qrcode.svg')
+        ));
     }
 
     /**

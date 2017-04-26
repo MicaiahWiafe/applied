@@ -6,6 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
+        "guzzlehttp/guzzle": "^6.2",
         "guzzlehttp/psr7": "^1.4",
         "lacasera/mpower-payment-php": "dev-master",
         "laravel/framework": "5.4.*",
@@ -16,8 +17,8 @@
         "php-http/curl-client": "^1.7",
         "php-http/guzzle6-adapter": "^1.1",
         "php-http/message": "^1.5",
-        "stripe/stripe-php": "^4.6",
-        "simplesoftwareio/simple-qrcode": "~1"
+        "simplesoftwareio/simple-qrcode": "~1",
+        "stripe/stripe-php": "^4.6"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
