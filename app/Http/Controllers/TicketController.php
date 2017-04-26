@@ -2,26 +2,17 @@
 
 namespace App\Http\Controllers;
 
+
 use Mail;
 use App\Models\User;
 use App\Models\Ticket;
 use App\Models\Movie;
 use Illuminate\Http\Request;
-use vendor\phpqrcode\qrlib;
-use vendor\phpqrcode\phpqrcode;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redirect;
-// use vendor\phpqrcode\bindings\tcpdf\QRcode;
-// use vendor\phpqrcode\qrlib as QRcode;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
-
-// namespace vedor\phpqrcode\qrlib;
-// require_once base_path('vendor/phpqrcode/qrlib.php');
-
-// include_once base_path('vendor/phpqrcode/bindings/tcpdf/qrcode.php');
-include base_path('vendor/phpqrcode/qrlib.php'); 
-// include_once base_path('vendor/phpqrcode/config.php'); 
+use SimpleSoftwareIO\QrCode\BaconQrCodeGenerator;
 
 class TicketController extends Controller
 {
@@ -39,13 +30,25 @@ class TicketController extends Controller
         echo $id;
         echo $request->user();
 
-        // echo input::get('movie');
-
-        echo $request->movie_title;
+        echo $movie_title = $request->movie_title;
 
 
         $this->create($request,$user);
-    }
+
+
+        //create svg formated qr code
+        $qrcode = new BaconQrCodeGenerator;
+        $qrcode->size(500)->generate('Make a qrcode without Laravel!', public_path().'/qrcode.svg');
+
+
+
+        //write png qr file to public folder
+        // $renderer = new \BaconQrCode\Renderer\Image\Png();
+        // $renderer->setHeight(256);
+        // $renderer->setWidth(256);
+        // $writer = new \BaconQrCode\Writer($renderer);
+        // $writer->writeFile('Name:'.$user->name.', Movie:'.$movie_title, 'qrcode.png');
+}
 
 
 
@@ -122,11 +125,10 @@ class TicketController extends Controller
 
 
         // outputs image directly into browser, as PNG stream 
-        // $QRcode = new QRcode();
-        QRcode::png('PHP QR Code :)');
+        // $qr = {!! QrCode::size(100)->generate(Request::url()); !!}
 
         $movie = Movie::findOrFail($request->movie_id);
-        // $myUser = ;
+
         $ticket = new Ticket();
         $ticket->email = $user->email;
         $ticket->user_id = $user->id;
@@ -134,7 +136,7 @@ class TicketController extends Controller
         $ticket->movie_id = $movie->id;
         
         $ticket->save();
-        return Redirect::route('viewMovie', array('id'=> $movie->id));
+        // return Redirect::route('viewMovie', array('id'=> $movie->id, ));
     }
 
     /**
@@ -148,12 +150,12 @@ class TicketController extends Controller
     public function send(Request $request)
     {
         
+        $user = Auth::user();
+        Mail::send('buy', ['user' => $user], function ($m) use ($user) {
+            $m->from('silverbirdticketing@gmail.com', 'Silverbird Ticketing');
 
-        // Mail::send('emails.reminder', ['user' => $user], function ($m) use ($user) {
-        //     $m->from('noreply@silverbird.com', 'Silverbird Ticketing');
-
-        //     $m->to($user->email, $user->name)->subject('Your Reminder!');
-        // });
+            $m->to($user->email, $user->name)->subject('Your Ticket');
+        });
     }
 
     /**

@@ -31,6 +31,14 @@
 
 											<input type="submit" class="btn btn-primary" value="qr test">
 										</form>
+
+										<form action="{{ URL::route('send') }}" method="get" enctype="multipart/form-data">
+											<input type="hidden" name="_token" value="{{ csrf_token() }}">
+											<input type="hidden" name="movie_id" value="{{ $movie->id }}">
+											<input type="hidden" name="movie_title" value="{{ $movie->title }}">
+
+											<input type="submit" class="btn btn-primary" value="email">
+										</form>
 			                		</div>
 			                	</div>
 			                </div>
