@@ -48,6 +48,11 @@ Route::post('/buy', array(
 	'as' => 'buy'
 ));
 
+Route::get('/buy', array(
+	'uses' => 'TicketController@main',
+	'as' => 'main'
+));
+
 Route::get('/send', array(
 	'uses' => 'TicketController@send',
 	'as' => 'send'

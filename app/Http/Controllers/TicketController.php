@@ -22,19 +22,29 @@ class TicketController extends Controller
 {
 
     /**
-    * Testing functions 
+    * Calling functions 
     **/
-    public function test(Request $request){
+    public function main(Request$request){
+        //
+        $this->qr($request);
+        $this->send($request);
+        return redirect()->away('https://app.mpowerpayments.com/click2pay-redirect/a13a0fa93b00b511833395c5');
+
+    }
+
+
+    /**
+    * Generate qr code 
+    **/
+    public function qr(Request $request){
         //
 
-        echo "Preparing your ticket";
+        echo "Preparing your ticket and ";
 
         $user = Auth::user();
         $id = Auth::id();
-        echo $id;
-        echo $request->user();
-
-        echo $movie_title = $request->movie_title;
+        
+        $movie_title = $request->movie_title;
 
 
         $this->create($request,$user);
@@ -44,8 +54,7 @@ class TicketController extends Controller
         $qrcode = new BaconQrCodeGenerator;
         $qrcode->size(500)->generate($user->email.', '.$movie_title, public_path().'/qrcode.svg');
 
-
-}
+    }
 
 
 
@@ -67,13 +76,10 @@ class TicketController extends Controller
     public function buy(Request $request)
     {
 
-        // {{ csrf_token()}};
-         // $user = User::findOrFail($user_id);
-        // $this->create($user);
+       
          $this->send($request);
         echo "Preparing your ticket";
-        // return Redirect::to('https://www.dropbox.com');
-         // header('Location : https://www.dropbox.com');
+        
     }
 
     /**
@@ -83,12 +89,7 @@ class TicketController extends Controller
      */
     public function create(Request $request, User $user)
     {
-        // build raw content - QRCode to send email, basic 
-         
-        
-        // outputs image directly into browser, as PNG stream 
-        // $qr = {!! QrCode::size(100)->generate(Request::url()); !!}
-
+       
         $movie = Movie::findOrFail($request->movie_id);
 
         $ticket = new Ticket();
@@ -112,21 +113,7 @@ class TicketController extends Controller
     public function send(Request $request)
     {
         $user = Auth::user();
-        // Mail::send('buy', ['user' => $user], function ($m) use ($user) {
-        //     $m->from('silverbirdticketing@gmail.com', 'Silverbird Ticketing');
-
-        //     $m->to($user->email, $user->name)->subject('Your Ticket');
-        // });
-                    // # First, instantiate the SDK with your API credentials
-                    // $mg = Mailgun::create('pubkey-fe3899f64463c14630586757721187c9');
-
-                    // # Now, compose and send your message.
-                    // $mg->messages()->send('google.com', [
-                    //   'from'    => 'silverbirdticketing@gmail.com', 
-                    //   'to'      => $user->email, 
-                    //   'subject' => 'The PHP SDK is awesome!', 
-                    //   'text'    => 'It is so simple to send a message.'
-                    // ]);
+        
 
         # Instantiate the client.
         $mgClient = new Mailgun(env('MAILGUN_SECRET'));

@@ -46,8 +46,8 @@
 				<!-- Movie poster url -->
 				<div class="form-group">
 					<input name="image_url" type="text" class="form-control" placeholder="Movie Poster URL"/>
-					Select image to upload:
-				    <input type="file" name="fileToUpload" id="fileToUpload">
+					<!-- Select image to upload:
+				    <input type="file" name="fileToUpload" id="fileToUpload"> -->
 				    <!-- <input type="submit" value="Upload Image" name="submit"> -->
 				</div>
 
